@@ -1,0 +1,380 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-emerald-deep: #0B5D3B;
+  --color-emerald-dark: #08422A;
+  --color-mint-light: #DDF3E7;
+  --color-mint-soft: #EEF9F3;
+  --color-ivory-warm: #F8F7F2;
+  --color-charcoal-deep: #202923;
+  --color-muted-gray: #778078;
+  --color-gold-soft: #D4AF37;
+  --color-gold-light: #FBF4DC;
+  
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-arabic: "Cairo", "Tajawal", system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html[dir="rtl"] {
+  font-family: var(--font-arabic);
+}
+
+html[dir="ltr"] {
+  font-family: var(--font-sans);
+}
+
+/* Touch action optimization and smooth scroll */
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+/* Custom scrollbar hiding for horizontal chip bars */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* High-five avatar keyframe animations for natural celebration */
+@keyframes highFiveLeft {
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  40% {
+    transform: translateX(38px) rotate(4deg);
+  }
+  60% {
+    transform: translateX(48px) rotate(-6deg);
+  }
+  75% {
+    transform: translateX(46px) rotate(-3deg);
+  }
+  100% {
+    transform: translateX(42px) rotate(0deg);
+  }
+}
+
+@keyframes highFiveRight {
+  0% {
+    transform: translateX(0) scaleX(-1) rotate(0deg);
+  }
+  40% {
+    transform: translateX(-38px) scaleX(-1) rotate(4deg);
+  }
+  60% {
+    transform: translateX(-48px) scaleX(-1) rotate(-6deg);
+  }
+  75% {
+    transform: translateX(-46px) scaleX(-1) rotate(-3deg);
+  }
+  100% {
+    transform: translateX(-42px) scaleX(-1) rotate(0deg);
+  }
+}
+
+@keyframes sparkleGlow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Interest Collision Animations */
+@keyframes collideFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-120px) scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(12px) scale(1.02);
+  }
+  85% {
+    transform: translateX(-4px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes collideFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(120px) scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-12px) scale(1.02);
+  }
+  85% {
+    transform: translateX(4px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes collisionImpactPulse {
+  0% {
+    transform: scale(0.75);
+    opacity: 0;
+    filter: drop-shadow(0 0 0 rgba(212, 175, 55, 0));
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 1;
+    filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.9));
+  }
+  75% {
+    transform: scale(0.96);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: drop-shadow(0 0 6px rgba(11, 93, 59, 0.2));
+  }
+}
+
+@keyframes avatarPop {
+  0% {
+    transform: scale(0.92);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes electricBeam {
+  0%, 100% {
+    opacity: 0.4;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.9);
+  }
+}
+
+.animate-collide-left {
+  animation: collideFromLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-collide-right {
+  animation: collideFromRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-collision-impact {
+  animation: collisionImpactPulse 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-avatar-pop {
+  animation: avatarPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.animate-electric-beam {
+  animation: electricBeam 1.5s ease-in-out infinite;
+}
+
+.animate-high-five-left {
+  animation: highFiveLeft 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.animate-high-five-right {
+  animation: highFiveRight 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.animate-sparkle-glow {
+  animation: sparkleGlow 1.8s ease-in-out infinite;
+}
+
+/* Organic Floating Levitation Wave */
+@keyframes organicFloatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-9px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(-4px) rotate(-0.8deg);
+  }
+}
+
+@keyframes organicFloatDelay {
+  0%, 100% {
+    transform: translateY(-6px) rotate(-0.8deg);
+  }
+  33% {
+    transform: translateY(0px) rotate(0.6deg);
+  }
+  66% {
+    transform: translateY(-10px) rotate(-1deg);
+  }
+}
+
+/* Living Floor Shadow breathing in sync with elevation */
+@keyframes floorShadowBreath {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.38;
+    filter: blur(8px);
+  }
+  33% {
+    transform: scale(0.82) translateY(2px);
+    opacity: 0.18;
+    filter: blur(14px);
+  }
+  66% {
+    transform: scale(0.92) translateY(1px);
+    opacity: 0.28;
+    filter: blur(10px);
+  }
+}
+
+.animate-float-slow {
+  animation: organicFloatSlow 4.5s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: organicFloatDelay 5s ease-in-out infinite 0.7s;
+}
+
+.animate-floor-shadow {
+  animation: floorShadowBreath 4.5s ease-in-out infinite;
+}
+
+/* 3D Perspective Utility */
+.perspective-card {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* Animated Avatar Keyframes */
+@keyframes avatarWaveArm {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-22deg);
+  }
+  40% {
+    transform: rotate(16deg);
+  }
+  60% {
+    transform: rotate(-18deg);
+  }
+  80% {
+    transform: rotate(10deg);
+  }
+}
+
+@keyframes avatarSmilingPulse {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.05) translateY(-3px);
+  }
+}
+
+@keyframes avatarBouncingJoy {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-7px) scale(1.03);
+  }
+  65% {
+    transform: translateY(1.5px) scale(0.99);
+  }
+}
+
+@keyframes avatarNodHead {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(3.5px) rotate(1.5deg);
+  }
+  50% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(2.5px) rotate(0.8deg);
+  }
+}
+
+@keyframes avatarSwayCool {
+  0%, 100% {
+    transform: rotate(0deg) translateX(0);
+  }
+  33% {
+    transform: rotate(3.5deg) translateX(2px);
+  }
+  66% {
+    transform: rotate(-3.5deg) translateX(-2px);
+  }
+}
+
+@keyframes avatarWinkEye {
+  0%, 80%, 100% {
+    transform: scaleY(1);
+  }
+  90% {
+    transform: scaleY(0.1);
+  }
+}
+
+.animate-avatar-wave {
+  animation: avatarWaveArm 1.5s ease-in-out infinite;
+  transform-origin: 75% 85%;
+}
+
+.animate-avatar-wave-left {
+  animation: avatarWaveArm 1.5s ease-in-out infinite;
+  transform-origin: 25% 85%;
+}
+
+.animate-avatar-smile {
+  animation: avatarSmilingPulse 2.2s ease-in-out infinite;
+}
+
+.animate-avatar-bounce {
+  animation: avatarBouncingJoy 1.8s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+}
+
+.animate-avatar-nod {
+  animation: avatarNodHead 2.2s ease-in-out infinite;
+}
+
+.animate-avatar-sway {
+  animation: avatarSwayCool 3.2s ease-in-out infinite;
+}
+
+.animate-avatar-wink {
+  animation: avatarWinkEye 3s ease-in-out infinite;
+}
+

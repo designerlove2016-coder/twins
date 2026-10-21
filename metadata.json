@@ -1,0 +1,8 @@
+{
+  "name": "Remix Hatan-Futuret twice  2",
+  "description": "Imported from GitHub: designerlove2016-coder/Hatan-Future",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
