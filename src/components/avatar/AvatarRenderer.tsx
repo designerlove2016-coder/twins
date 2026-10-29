@@ -11,6 +11,7 @@ interface AvatarRendererProps {
   animate?: boolean;
   interactive?: boolean;
   forceMotion?: AvatarConfig['motionStyle'];
+  variant?: 'circle' | 'cutout' | 'portrait';
   onClick?: (e: React.MouseEvent) => void;
 }
 
@@ -24,6 +25,7 @@ export const AvatarRenderer: React.FC<AvatarRendererProps> = ({
   animate = true,
   interactive = true,
   forceMotion,
+  variant = 'circle',
   onClick,
 }) => {
   const [isTapped, setIsTapped] = useState(false);
@@ -32,12 +34,31 @@ export const AvatarRenderer: React.FC<AvatarRendererProps> = ({
 
   const motion = forceMotion || avatar.motionStyle || 'waving';
 
+  // Sticker vs Illustrated handling
+  const isSticker = avatar.avatarType === 'sticker' || Boolean(avatar.stickerUrl);
+
   // Face shift based on direction
   const faceShiftX = dir === 'right' ? 4 : dir === 'left' ? -4 : 0;
   const isFacingRight = dir === 'right';
   const isFacingLeft = dir === 'left';
 
-  // Determine motion class
+  // Determine sticker motion class (تتحرك وتروح يمين ويسار وتتفاعل)
+  let stickerMotionClass = 'animate-sticker-sway';
+  if (animate) {
+    const stMotion = forceMotion || avatar.stickerAnimation || avatar.motionStyle || 'sway-left-right';
+    if (stMotion === 'bouncy-hop' || stMotion === 'bouncing') {
+      stickerMotionClass = 'animate-sticker-hop';
+    } else if (stMotion === 'pulse-grow' || stMotion === 'smiling') {
+      stickerMotionClass = 'animate-sticker-pulse';
+    } else if (stMotion === 'tilt-wiggle' || stMotion === 'cool-sway' || stMotion === 'nodding') {
+      stickerMotionClass = 'animate-sticker-wiggle';
+    } else {
+      // Default: sway left and right!
+      stickerMotionClass = 'animate-sticker-sway';
+    }
+  }
+
+  // Determine standard motion class
   let motionClass = '';
   if (animate) {
     if (motion === 'bouncing') {
@@ -62,6 +83,131 @@ export const AvatarRenderer: React.FC<AvatarRendererProps> = ({
     setTimeout(() => setIsTapped(false), 900);
     onClick?.(e);
   };
+
+  // Render Cutout Character (stands directly on card surface, exactly like user's Image 2)
+  if (variant === 'cutout') {
+    const cutoutSrc = avatar.cutoutUrl || avatar.stickerUrl || '/assets/aistudio/character_standing_maya.png';
+    return (
+      <div
+        style={{ width: s, height: Math.round(s * 1.35) }}
+        onClick={interactive ? handleInteraction : onClick}
+        className={`relative inline-flex items-end justify-center shrink-0 select-none ${
+          interactive ? 'cursor-pointer active:scale-95 transition-transform' : ''
+        } ${className}`}
+        aria-label={`Character for ${avatar.id}`}
+      >
+        {isTapped && (
+          <div className="absolute -top-3 inset-x-0 flex justify-center pointer-events-none z-30 animate-avatar-pop">
+            <span className="text-sm">✨</span>
+          </div>
+        )}
+        <div
+          className={`
+            relative z-10 w-full h-full flex items-end justify-center
+            ${animate ? stickerMotionClass : ''}
+          `}
+        >
+          <img
+            src={cutoutSrc}
+            alt={avatar.id}
+            className="w-full h-full object-contain object-bottom select-none pointer-events-none filter drop-shadow-md"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Render Portrait Variant (sleek dark portrait frame, exactly like user's Image 1)
+  if (variant === 'portrait') {
+    const portraitSrc = avatar.portraitUrl || avatar.stickerUrl || '/assets/aistudio/maya_portrait_card.jpg';
+    return (
+      <div
+        style={{ width: s, height: Math.round(s * 1.15) }}
+        onClick={interactive ? handleInteraction : onClick}
+        className={`relative rounded-2xl overflow-hidden bg-black flex items-center justify-center shrink-0 select-none shadow-md ${
+          interactive ? 'cursor-pointer active:scale-95 transition-transform' : ''
+        } ${className}`}
+        aria-label={`Portrait for ${avatar.id}`}
+      >
+        <img
+          src={portraitSrc}
+          alt={avatar.id}
+          className="w-full h-full object-cover object-center select-none pointer-events-none"
+          loading="lazy"
+        />
+      </div>
+    );
+  }
+
+  // Render 3D Animated Sticker Avatar when selected
+  if (isSticker && avatar.stickerUrl) {
+    return (
+      <div
+        style={{ width: s, height: s }}
+        onClick={interactive ? handleInteraction : onClick}
+        className={`relative inline-flex items-center justify-center shrink-0 select-none ${
+          interactive ? 'cursor-pointer active:scale-95 transition-transform' : ''
+        } ${className}`}
+        aria-label={`Sticker Avatar for ${avatar.id}`}
+      >
+        {/* Interactive celebratory tap reaction sparkle */}
+        {isTapped && (
+          <div className="absolute -top-3 inset-x-0 flex justify-center pointer-events-none z-30 animate-avatar-pop">
+            <span className="text-sm">✨</span>
+          </div>
+        )}
+
+        {/* 3D Tactile Outer Circular Frame & Glow */}
+        {showBackdrop && (
+          <div
+            className="
+              absolute inset-0 rounded-full
+              bg-gradient-to-b from-[#FFFFFF] via-[#FAF9F5] to-[#E6E1D4]
+              dark:from-[#1D2B22] dark:via-[#131F18] dark:to-[#0A120E]
+              border-2 border-[#0B5D3B]/40 dark:border-[#10B981]/50
+              shadow-[0_4px_10px_rgba(11,93,59,0.18),0_2px_4px_rgba(0,0,0,0.06)]
+              dark:shadow-[0_4px_14px_rgba(0,0,0,0.7),0_0_8px_rgba(16,185,129,0.2)]
+            "
+          />
+        )}
+
+        {/* The Animated Sticker Content (fills the circular cut with generous scale) */}
+        <div
+          className={`
+            relative z-10 w-[96%] h-[96%] rounded-full overflow-hidden flex items-center justify-center
+            ${animate ? stickerMotionClass : ''}
+            ${highFivePose ? (isFacingRight ? 'rotate-8 translate-x-1' : '-rotate-8 -translate-x-1') : ''}
+          `}
+        >
+          <img
+            src={avatar.stickerUrl}
+            alt={avatar.id}
+            className="w-full h-full object-cover rounded-full select-none pointer-events-none filter drop-shadow-sm scale-105"
+            loading="lazy"
+          />
+
+          {/* Top specular glossy highlight sheen over sticker */}
+          <div className="absolute inset-x-0 top-0 h-[44%] rounded-t-full bg-gradient-to-b from-white/70 via-white/15 to-transparent pointer-events-none" />
+          
+          {/* Subtle inner gold rim */}
+          <div className="absolute inset-0 rounded-full border border-white/50 dark:border-[#D4AF37]/30 pointer-events-none" />
+        </div>
+
+        {/* Motion/Live Indicator scaled proportionally */}
+        <div
+          style={{
+            width: Math.max(16, Math.round(s * 0.22)),
+            height: Math.max(16, Math.round(s * 0.22)),
+            fontSize: Math.max(8.5, Math.round(s * 0.11)),
+          }}
+          className="absolute -bottom-0.5 -right-0.5 z-20 rounded-full bg-[#0B5D3B] dark:bg-[#10B981] text-white flex items-center justify-center font-bold shadow-xs border-2 border-white dark:border-[#111813]"
+        >
+          ⚡
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

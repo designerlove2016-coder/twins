@@ -9,6 +9,7 @@ export interface OrganicFloatingCardProps {
   floatDelay?: boolean;
   glowColor?: string;
   shadowClassName?: string;
+  enablePulseGlow?: boolean;
 }
 
 export const OrganicFloatingCard: React.FC<OrganicFloatingCardProps> = ({
@@ -20,6 +21,7 @@ export const OrganicFloatingCard: React.FC<OrganicFloatingCardProps> = ({
   floatDelay = false,
   glowColor = 'rgba(11, 93, 59, 0.15)',
   shadowClassName = '',
+  enablePulseGlow = true,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const shineRef = useRef<HTMLDivElement>(null);
@@ -83,6 +85,14 @@ export const OrganicFloatingCard: React.FC<OrganicFloatingCardProps> = ({
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
     >
+      {/* Subtle Luxury Pulsing Glow Aura */}
+      {enablePulseGlow && (
+        <div
+          aria-hidden="true"
+          className="absolute -inset-1 rounded-[30px] bg-gradient-to-r from-[#0B5D3B]/20 via-[#D4AF37]/20 to-[#10B981]/25 dark:from-[#10B981]/30 dark:via-[#D4AF37]/25 dark:to-[#0B5D3B]/30 blur-md pointer-events-none animate-aura-breath z-0"
+        />
+      )}
+
       {/* Living Bottom Floor Shadow */}
       <div
         aria-hidden="true"
@@ -99,6 +109,7 @@ export const OrganicFloatingCard: React.FC<OrganicFloatingCardProps> = ({
           border border-slate-200/80 dark:border-slate-800
           shadow-lg shadow-black/5 dark:shadow-black/30
           overflow-hidden
+          ${enablePulseGlow ? 'animate-pulse-glow' : ''}
           ${floatClass}
           ${onClick ? 'cursor-pointer active:scale-[0.98]' : ''}
           ${className}

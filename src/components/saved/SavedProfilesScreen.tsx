@@ -172,80 +172,93 @@ export const SavedProfilesScreen: React.FC<SavedProfilesScreenProps> = ({
               className="p-4 border border-slate-200/80 dark:border-slate-800"
               floatDelay={idx % 2 === 1}
             >
-              {/* Card Header Info */}
-              <div className="flex items-start justify-between gap-3">
+              {/* Card Upper Body: Hero Avatar (sized to user's red rectangle: 124px) + Info */}
+              <div className="flex items-center gap-3.5">
+                {/* Hero Avatar */}
                 <div
-                  className="flex items-center gap-3 cursor-pointer flex-1 min-w-0"
+                  className="relative shrink-0 cursor-pointer group"
                   onClick={() => onSelectMatch(match)}
                 >
-                  <AvatarRenderer avatar={match.avatar} size={54} direction="center" />
-                  <div className="min-w-0">
-                    <h2 className="text-sm font-bold text-[#202923] dark:text-white truncate">
-                      @{match.username}
-                    </h2>
-                    <div className="flex items-center gap-1.5 text-xs text-[#778078] dark:text-slate-400 mt-0.5">
-                      <MapPin size={12} className="text-[#0B5D3B]" />
-                      <span>{formatCity(match.city, language)}</span>
-                      {match.ageRange && (
-                        <>
-                          <span>·</span>
-                          <span>{match.ageRange}</span>
-                        </>
-                      )}
+                  <AvatarRenderer
+                    avatar={match.avatar}
+                    size={108}
+                    variant={match.avatar.cutoutUrl ? 'cutout' : (match.avatar.stickerUrl ? 'cutout' : 'circle')}
+                    direction="center"
+                  />
+                  <span className="absolute bottom-1 right-2 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#131D16] shadow-sm z-20" />
+                </div>
+
+                {/* Info Column */}
+                <div className="flex-1 min-w-0 flex flex-col justify-between self-stretch py-0.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0 cursor-pointer" onClick={() => onSelectMatch(match)}>
+                      <h2 className="text-base font-black text-[#1A251E] dark:text-white truncate">
+                        @{match.username}
+                      </h2>
+                      <div className="flex items-center gap-1.5 text-xs text-[#69726A] dark:text-slate-300 mt-1">
+                        <MapPin size={12} className="text-[#0B5D3B]" />
+                        <span>{formatCity(match.city, language)}</span>
+                        {match.ageRange && (
+                          <>
+                            <span className="text-slate-400">·</span>
+                            <span>{match.ageRange}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {/* Similarity Score Pill */}
+                      <div className="px-2.5 py-1 rounded-2xl bg-gradient-to-b from-[#DDF3E7] to-[#CCEEDC] dark:from-[#0B5D3B]/40 dark:to-[#08422A]/50 text-[#0B5D3B] dark:text-[#DDF3E7] text-xs font-black font-mono shadow-[0_2px_0_0_#A8D5C0] dark:shadow-[0_2px_0_0_#052A1A]">
+                        {match.similarityScore}%
+                      </div>
+
+                      {/* Bookmark Toggle Button */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onToggleSaveProfile(match.id);
+                        }}
+                        className="
+                          min-h-[36px] min-w-[36px] flex items-center justify-center rounded-xl
+                          bg-gradient-to-b from-[#FFF9E6] to-[#FBE7AF] dark:from-[#2F2612] dark:to-[#221C0B]
+                          border border-[#D4AF37]/50
+                          text-[#D4AF37] shadow-[0_2px_0_0_#BFA032]
+                          active:translate-y-0.5 active:shadow-[0_1px_0_0_#BFA032]
+                          cursor-pointer transition-all
+                        "
+                        title={t.unsaveProfile}
+                        aria-label={t.unsaveProfile}
+                      >
+                        <Bookmark size={15} className="fill-[#D4AF37]" />
+                      </button>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-2">
-                  {/* Similarity Score Pill */}
-                  <div className="px-3 py-1 rounded-2xl bg-gradient-to-b from-[#DDF3E7] to-[#CCEEDC] dark:from-[#0B5D3B]/40 dark:to-[#08422A]/50 text-[#0B5D3B] dark:text-[#DDF3E7] text-xs font-black font-mono shadow-[0_3px_0_0_#A8D5C0] dark:shadow-[0_3px_0_0_#052A1A]">
-                    {match.similarityScore}%
+                  {/* Bio snippet */}
+                  <p className="mt-1.5 text-xs text-[#778078] dark:text-slate-400 line-clamp-1 italic">
+                    "{match.bio}"
+                  </p>
+
+                  {/* Shared Interests Row */}
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {match.sharedInterests.slice(0, 2).map((tag, i) => (
+                      <span
+                        key={i}
+                        className="
+                          px-2.5 py-0.5 rounded-full
+                          bg-[#E8F7EE] dark:bg-[#122A1E]
+                          text-[#07472B] dark:text-[#34D399] text-[10px] font-black
+                          border border-[#0B5D3B]/30 dark:border-[#10B981]/50
+                          shadow-2xs
+                        "
+                      >
+                        {formatInterest(tag, language)}
+                      </span>
+                    ))}
                   </div>
-
-                  {/* Bookmark Toggle Button */}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onToggleSaveProfile(match.id);
-                    }}
-                    className="
-                      min-h-[38px] min-w-[38px] flex items-center justify-center rounded-xl
-                      bg-gradient-to-b from-[#FFF9E6] to-[#FBE7AF] dark:from-[#2F2612] dark:to-[#221C0B]
-                      border border-[#D4AF37]/50
-                      text-[#D4AF37] shadow-[0_2px_0_0_#BFA032]
-                      active:translate-y-0.5 active:shadow-[0_1px_0_0_#BFA032]
-                      cursor-pointer transition-all
-                    "
-                    title={t.unsaveProfile}
-                    aria-label={t.unsaveProfile}
-                  >
-                    <Bookmark size={16} className="fill-[#D4AF37]" />
-                  </button>
                 </div>
-              </div>
-
-              {/* Bio snippet */}
-              <p className="mt-2 text-xs text-[#778078] dark:text-slate-400 line-clamp-1 italic">
-                "{match.bio}"
-              </p>
-
-              {/* Shared Interests Row with High Contrast */}
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {match.sharedInterests.slice(0, 3).map((tag, i) => (
-                  <span
-                    key={i}
-                    className="
-                      px-2.5 py-0.5 rounded-full
-                      bg-[#E8F7EE] dark:bg-[#122A1E]
-                      text-[#07472B] dark:text-[#34D399] text-[10px] font-black
-                      border border-[#0B5D3B]/30 dark:border-[#10B981]/50
-                      shadow-2xs
-                    "
-                  >
-                    {formatInterest(tag, language)}
-                  </span>
-                ))}
               </div>
 
               {/* Action Buttons Row */}

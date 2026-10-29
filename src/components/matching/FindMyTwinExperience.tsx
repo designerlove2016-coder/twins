@@ -528,29 +528,40 @@ export const FindMyTwinExperience: React.FC<FindMyTwinExperienceProps> = ({
                               </div>
                             </div>
                           ) : (
-                            /* MERGED COMMON GROUND BADGE WITH REACT-SPRING PHYSICAL TILT */
+                            /* MERGED COMMON GROUND BADGE WITH 3D LUXURY SKEUOMORPHIC CARD & SPRING TILT */
                             <SpringTiltCard
                               className="w-full max-w-[310px]"
                               maxTilt={16}
                               scaleOnHover={1.06}
                             >
-                              <div className="animate-collision-impact w-full px-3.5 py-2 rounded-2xl bg-white dark:bg-[#151E17] border-2 border-[#0B5D3B] dark:border-[#10b981] shadow-md dark:shadow-black/60 flex items-center justify-between gap-2">
-                                <div className="flex items-center gap-2 min-w-0">
-                                  <div className="w-7 h-7 rounded-lg bg-[#DDF3E7] dark:bg-[#0B5D3B]/40 flex items-center justify-center shrink-0">
+                              <div className="
+                                animate-collision-impact relative overflow-hidden w-full px-4 py-2.5 rounded-2xl
+                                bg-gradient-to-b from-white via-[#FAF9F5] to-[#EAE6DC]
+                                dark:from-[#1D2B22] dark:via-[#141F18] dark:to-[#0D1510]
+                                border-2 border-[#0B5D3B] dark:border-[#10b981]
+                                shadow-[0_5px_0_0_#062A1A,0_10px_16px_rgba(11,93,59,0.2)]
+                                dark:shadow-[0_5px_0_0_#03180F]
+                                flex items-center justify-between gap-2
+                              ">
+                                {/* Top specular glossy highlight sheen */}
+                                <div className="absolute inset-x-2 top-0.5 h-[42%] rounded-t-xl bg-gradient-to-b from-white/90 via-white/20 to-transparent pointer-events-none" />
+
+                                <div className="flex items-center gap-2.5 min-w-0 relative z-10">
+                                  <div className="w-8 h-8 rounded-xl bg-gradient-to-b from-[#E8F7EE] to-[#D5EDE0] dark:from-[#0B5D3B]/50 dark:to-[#073D26] border border-[#0B5D3B]/25 flex items-center justify-center shrink-0 shadow-2xs">
                                     <RealisticIcon name={item.iconKey} size={20} />
                                   </div>
                                   <div className="min-w-0">
-                                    <span className="text-[9px] uppercase tracking-wider text-[#D4AF37] font-bold block leading-none">
+                                    <span className="text-[9px] uppercase tracking-wider text-[#D4AF37] font-black block leading-none">
                                       ★ {language === 'ar' ? 'نقطة التقاء مشتركة' : 'Common Ground Locked'}
                                     </span>
-                                    <span className="text-xs font-bold text-[#0B5D3B] dark:text-[#DDF3E7] truncate block">
+                                    <span className="text-xs font-black text-[#0B5D3B] dark:text-[#E8F7EE] truncate block mt-0.5">
                                       {language === 'ar' ? item.labelAr : item.labelEn}
                                     </span>
                                   </div>
                                 </div>
 
-                                <div className="flex items-center gap-1 shrink-0">
-                                  <span className="text-[9px] font-bold text-[#0B5D3B] dark:text-[#DDF3E7]">
+                                <div className="flex items-center gap-1.5 shrink-0 relative z-10">
+                                  <span className="text-[10px] font-black text-[#0B5D3B] dark:text-[#10B981]">
                                     100%
                                   </span>
                                   <div className="w-5 h-5 rounded-full bg-[#0B5D3B] text-white flex items-center justify-center shadow-xs">
@@ -596,32 +607,51 @@ export const FindMyTwinExperience: React.FC<FindMyTwinExperienceProps> = ({
             {phase === 'revealed' && (
               <div className="w-full mt-2 animate-fade-in space-y-4">
                 
-                {/* Similarity Score Banner */}
-                <div className="p-4 rounded-3xl bg-white dark:bg-[#151E17] border border-[#0B5D3B]/20 shadow-xl flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-bold text-[#778078] uppercase tracking-wider block">
+                {/* 3D Tactile Skeuomorphic Similarity Score Banner */}
+                <div className="
+                  relative overflow-hidden p-4 rounded-3xl
+                  bg-gradient-to-b from-white via-[#FAF9F5] to-[#EAE6DC]
+                  dark:from-[#1D2B22] dark:via-[#141F18] dark:to-[#0D1510]
+                  border-2 border-white/95 dark:border-[#10B981]/40
+                  shadow-[0_8px_20px_rgba(11,93,59,0.14)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.5)]
+                  flex items-center justify-between
+                ">
+                  {/* Top specular glossy highlight sheen */}
+                  <div className="absolute inset-x-3 top-0.5 h-[40%] rounded-t-2xl bg-gradient-to-b from-white/90 via-white/20 to-transparent pointer-events-none" />
+
+                  <div className="relative z-10">
+                    <span className="text-xs font-bold text-[#778078] dark:text-slate-300 uppercase tracking-wider block">
                       {t.similarityMatch}
                     </span>
                     <div className="flex items-baseline gap-1 mt-0.5">
-                      <span className="text-4xl font-extrabold text-[#0B5D3B] dark:text-[#10b981] font-mono tabular-nums">
+                      <span className="text-4xl font-black text-[#0B5D3B] dark:text-[#10b981] font-mono tabular-nums">
                         {animatedScore}%
                       </span>
-                      <span className="text-xs font-semibold text-[#D4AF37]">
+                      <span className="text-xs font-bold text-[#D4AF37]">
                         {animatedScore >= 95 ? (language === 'ar' ? '★ شبيه استثنائي' : '★ Exceptional Twin') : (language === 'ar' ? '★ توافق عالي جداً' : '★ High Compatibility')}
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1.5 text-xs text-[#0B5D3B] dark:text-[#DDF3E7] font-medium">
-                    <ShieldCheck size={16} className="text-[#0B5D3B]" />
+                  <div className="flex items-center gap-1.5 text-xs text-[#0B5D3B] dark:text-[#DDF3E7] font-bold relative z-10 px-3 py-1.5 rounded-full bg-white/80 dark:bg-black/30 border border-[#0B5D3B]/20">
+                    <ShieldCheck size={16} className="text-[#0B5D3B] dark:text-[#10B981]" />
                     <span>{formatCity(match.city, language)}</span>
                   </div>
                 </div>
 
                 {/* Collided Common Ground Highlights with Spring Tilt */}
-                <div className="p-4 rounded-3xl bg-white dark:bg-[#151E17] border border-slate-200/80 dark:border-slate-800 shadow-sm">
-                  <div className="flex items-center justify-between mb-2.5">
-                    <h4 className="text-xs font-bold text-[#778078] uppercase tracking-wider flex items-center gap-1.5">
+                <div className="
+                  relative overflow-hidden p-4 rounded-3xl
+                  bg-gradient-to-b from-white via-[#FAF9F5] to-[#EAE6DC]
+                  dark:from-[#1D2B22] dark:via-[#141F18] dark:to-[#0D1510]
+                  border border-white/95 dark:border-white/10
+                  shadow-[0_8px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)]
+                ">
+                  {/* Top specular glossy highlight sheen */}
+                  <div className="absolute inset-x-3 top-0.5 h-[35%] rounded-t-2xl bg-gradient-to-b from-white/80 via-white/20 to-transparent pointer-events-none" />
+
+                  <div className="flex items-center justify-between mb-2.5 relative z-10">
+                    <h4 className="text-xs font-bold text-[#778078] dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
                       <Sparkles size={13} className="text-[#D4AF37]" />
                       <span>{language === 'ar' ? 'النقاط المشتركة التي التقت' : 'Unified Common Ground'}</span>
                     </h4>
@@ -635,8 +665,8 @@ export const FindMyTwinExperience: React.FC<FindMyTwinExperienceProps> = ({
                     </button>
                   </div>
 
-                  {/* Clean list of common ground points with high contrast */}
-                  <div className="flex flex-wrap gap-2">
+                  {/* Clean list of common ground points with high contrast emerald pills */}
+                  <div className="flex flex-wrap gap-2 relative z-10">
                     {match.sharedInterests.map((interest, i) => (
                       <SpringTiltCard key={i} maxTilt={12} scaleOnHover={1.05}>
                         <div className="px-3.5 py-1.5 rounded-xl bg-[#E8F7EE] dark:bg-[#122A1E] text-[#07472B] dark:text-[#34D399] text-xs font-black border border-[#0B5D3B]/30 dark:border-[#10B981]/50 flex items-center gap-1.5 shadow-2xs">
@@ -648,12 +678,12 @@ export const FindMyTwinExperience: React.FC<FindMyTwinExperienceProps> = ({
                   </div>
 
                   {/* Match Bio Quote */}
-                  <p className="mt-3 text-xs italic text-[#778078] dark:text-slate-300 border-t border-slate-100 dark:border-slate-800 pt-2.5">
+                  <p className="mt-3 text-xs italic text-[#778078] dark:text-slate-300 border-t border-slate-200/60 dark:border-slate-800 pt-2.5 relative z-10">
                     "{formatBio(match, language)}"
                   </p>
                 </div>
 
-                {/* Action Buttons */}
+                {/* 3D Tactile Skeuomorphic Action Buttons */}
                 <div className="space-y-2.5 pt-1">
                   <div className="grid grid-cols-2 gap-2">
                     {onToggleSaveProfile && (
@@ -664,16 +694,20 @@ export const FindMyTwinExperience: React.FC<FindMyTwinExperienceProps> = ({
                           onToggleSaveProfile(match.id);
                         }}
                         className={`
-                          h-11 rounded-2xl flex items-center justify-center gap-2 text-xs font-bold border transition-all cursor-pointer
-                          ${
-                            savedProfileIds.includes(match.id)
-                              ? 'bg-[#FFF9E6] dark:bg-[#2F2612] text-[#D4AF37] border-[#D4AF37]/50 shadow-xs'
-                              : 'bg-white dark:bg-[#18221C] border-slate-200 dark:border-slate-800 text-[#202923] dark:text-white hover:border-[#0B5D3B]/40'
-                          }
+                          relative h-12 rounded-2xl flex items-center justify-center gap-2 text-xs font-black border transition-all cursor-pointer overflow-hidden
+                          bg-gradient-to-b from-white via-[#FAF9F5] to-[#EAE6DC]
+                          dark:from-[#1D2B22] dark:via-[#141E18] dark:to-[#0D1510]
+                          border-white/95 dark:border-[#10B981]/30
+                          shadow-[0_4px_0_0_#CFC6B4,0_8px_14px_rgba(0,0,0,0.06)]
+                          dark:shadow-[0_4px_0_0_#062316]
+                          active:translate-y-1 active:shadow-[0_1px_0_0_#CFC6B4]
+                          dark:active:shadow-[0_1px_0_0_#062316]
+                          ${savedProfileIds.includes(match.id) ? 'text-[#D4AF37]' : 'text-[#202923] dark:text-white'}
                         `}
                       >
-                        <Bookmark size={15} className={savedProfileIds.includes(match.id) ? 'fill-[#D4AF37]' : ''} />
-                        <span>{savedProfileIds.includes(match.id) ? t.savedProfile : t.saveProfile}</span>
+                        <div className="absolute inset-x-2 top-0.5 h-[38%] rounded-xl bg-gradient-to-b from-white/90 via-white/20 to-transparent pointer-events-none" />
+                        <Bookmark size={15} className={`relative z-10 ${savedProfileIds.includes(match.id) ? 'fill-[#D4AF37]' : ''}`} />
+                        <span className="relative z-10">{savedProfileIds.includes(match.id) ? t.savedProfile : t.saveProfile}</span>
                       </button>
                     )}
 
@@ -684,14 +718,26 @@ export const FindMyTwinExperience: React.FC<FindMyTwinExperienceProps> = ({
                           e.stopPropagation();
                           onSendHighFive(match);
                         }}
-                        className="h-11 rounded-2xl bg-white dark:bg-[#18221C] border border-[#0B5D3B]/40 text-[#0B5D3B] dark:text-[#DDF3E7] font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-[#DDF3E7]/40 active:scale-95 transition-all cursor-pointer shadow-2xs"
+                        className="
+                          relative h-12 rounded-2xl flex items-center justify-center gap-1.5 text-xs font-black border transition-all cursor-pointer overflow-hidden
+                          bg-gradient-to-b from-white via-[#FAF9F5] to-[#EAE6DC]
+                          dark:from-[#1D2B22] dark:via-[#141E18] dark:to-[#0D1510]
+                          border-white/95 dark:border-[#10B981]/30
+                          shadow-[0_4px_0_0_#CFC6B4,0_8px_14px_rgba(0,0,0,0.06)]
+                          dark:shadow-[0_4px_0_0_#062316]
+                          active:translate-y-1 active:shadow-[0_1px_0_0_#CFC6B4]
+                          dark:active:shadow-[0_1px_0_0_#062316]
+                          text-[#0B5D3B] dark:text-[#10B981]
+                        "
                       >
-                        <HandMetal size={15} className="text-[#D4AF37]" />
-                        <span>{t.highFive}</span>
+                        <div className="absolute inset-x-2 top-0.5 h-[38%] rounded-xl bg-gradient-to-b from-white/90 via-white/20 to-transparent pointer-events-none" />
+                        <HandMetal size={15} className="text-[#D4AF37] relative z-10" />
+                        <span className="relative z-10">{t.highFive}</span>
                       </button>
                     )}
                   </div>
 
+                  {/* COMPARE PERSONALITIES: Full 3D Tactile Skeuomorphic Master Button */}
                   <button
                     type="button"
                     id="find-twin-compare-btn"
@@ -707,26 +753,40 @@ export const FindMyTwinExperience: React.FC<FindMyTwinExperienceProps> = ({
                       onOpenComparison(match);
                     }}
                     className="
-                      relative z-20 w-full h-12 rounded-2xl
-                      bg-gradient-to-b from-[#168858] via-[#0B5D3B] to-[#073D26]
+                      relative z-20 w-full min-h-[52px] rounded-2xl
+                      bg-gradient-to-b from-[#189662] via-[#0B5D3B] to-[#073D26]
                       dark:from-[#199863] dark:via-[#0E6D46] dark:to-[#073D26]
-                      text-white font-black text-sm flex items-center justify-center gap-2
-                      border-2 border-[#29B076]/70 dark:border-[#34D399]/60
-                      shadow-lg shadow-[#0B5D3B]/30
-                      hover:brightness-105 active:scale-[0.98] active:translate-y-1 transition-all cursor-pointer
+                      text-white font-black text-sm flex items-center justify-center gap-2.5
+                      border-2 border-[#34D399]/70 dark:border-[#34D399]/60
+                      shadow-[0_6px_0_0_#062A1A,0_14px_28px_rgba(11,93,59,0.45)]
+                      dark:shadow-[0_6px_0_0_#03180F,0_14px_28px_rgba(0,0,0,0.7)]
+                      hover:brightness-105 active:scale-[0.98] active:translate-y-1.5 active:shadow-[0_1px_0_0_#062A1A]
+                      transition-all duration-150 transform-gpu cursor-pointer overflow-hidden
                     "
                   >
-                    <Layers size={18} />
-                    <span>{t.comparePersonalities}</span>
+                    {/* Top specular glossy highlight sheen */}
+                    <div className="absolute inset-x-3 top-0.5 h-[42%] rounded-xl bg-gradient-to-b from-white/70 via-white/15 to-transparent pointer-events-none" />
+                    <Layers size={19} className="relative z-10" />
+                    <span className="relative z-10 tracking-wide">{t.comparePersonalities}</span>
                   </button>
 
                   {onNextMatch && (
                     <button
                       onClick={onNextMatch}
-                      className="w-full h-11 rounded-2xl bg-white dark:bg-[#202923] border border-slate-200 dark:border-slate-700 text-[#202923] dark:text-[#F8F7F2] font-semibold text-xs flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-[0.98] transition-all cursor-pointer"
+                      className="
+                        relative w-full h-12 rounded-2xl flex items-center justify-center gap-2 text-xs font-black border transition-all cursor-pointer overflow-hidden
+                        bg-gradient-to-b from-white via-[#FAF9F5] to-[#EAE6DC]
+                        dark:from-[#1D2B22] dark:via-[#141E18] dark:to-[#0D1510]
+                        border-white/95 dark:border-white/10
+                        shadow-[0_4px_0_0_#CFC6B4,0_8px_14px_rgba(0,0,0,0.06)]
+                        dark:shadow-[0_4px_0_0_#062316]
+                        active:translate-y-1 active:shadow-[0_1px_0_0_#CFC6B4]
+                        text-[#202923] dark:text-[#E8F7EE]
+                      "
                     >
-                      <RefreshCw size={14} />
-                      <span>{t.nextTwin}</span>
+                      <div className="absolute inset-x-2 top-0.5 h-[38%] rounded-xl bg-gradient-to-b from-white/90 via-white/20 to-transparent pointer-events-none" />
+                      <RefreshCw size={14} className="relative z-10" />
+                      <span className="relative z-10">{t.nextTwin}</span>
                     </button>
                   )}
                 </div>

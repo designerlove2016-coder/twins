@@ -8,6 +8,8 @@ interface BottomTabBarProps {
   onNavigate: (screen: ActiveScreen) => void;
   language: Language;
   savedCount?: number;
+  hasNewMatch?: boolean;
+  newMatchScore?: number;
 }
 
 export const BottomTabBar: React.FC<BottomTabBarProps> = ({
@@ -15,6 +17,8 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({
   onNavigate,
   language,
   savedCount = 0,
+  hasNewMatch = false,
+  newMatchScore,
 }) => {
   const t = TRANSLATIONS[language];
 
@@ -132,6 +136,9 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({
                 );
               }
 
+              const isMatchesTab = tab.screen === 'matches';
+              const showNewMatchBadge = isMatchesTab && hasNewMatch && !isActive;
+
               // The other 4 3D Tactile Navigation Buttons
               return (
                 <button
@@ -148,12 +155,43 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({
                         : 'hover:bg-white/60 dark:hover:bg-white/5 text-[#778078] dark:text-slate-400'
                     }
                   `}
-                  aria-label={tab.label}
+                  aria-label={
+                    showNewMatchBadge
+                      ? `${tab.label} (${language === 'ar' ? 'تطابق جديد متوفر' : 'New match available'})`
+                      : tab.label
+                  }
                   aria-current={isActive ? 'page' : undefined}
                 >
                   {/* Top specular sheen for active button */}
                   {isActive && (
                     <div className="absolute inset-x-1.5 top-0.5 h-[40%] rounded-xl bg-gradient-to-b from-white/80 via-white/20 to-transparent pointer-events-none" />
+                  )}
+
+                  {/* Subtle 'New Match Available' floating badge with luxury pulse */}
+                  {showNewMatchBadge && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 pointer-events-none z-30 flex flex-col items-center select-none">
+                      <div className="
+                        px-1.5 py-0.5 rounded-full
+                        bg-gradient-to-r from-[#0B5D3B] via-[#10B981] to-[#0B5D3B]
+                        border border-[#34D399]/70
+                        shadow-[0_2px_8px_rgba(16,185,129,0.5),0_0_10px_rgba(212,175,55,0.35)]
+                        text-[7.5px] font-black text-white uppercase tracking-wider
+                        whitespace-nowrap
+                        animate-match-badge
+                        flex items-center gap-1
+                      ">
+                        <span className="relative flex h-1.5 w-1.5 shrink-0">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D4AF37] opacity-80" />
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#D4AF37]" />
+                        </span>
+                        <span>{t.newMatchBadgeLabel || (language === 'ar' ? 'تطابق جديد' : 'New Match')}</span>
+                        {newMatchScore !== undefined && (
+                          <span className="text-[#D4AF37] font-mono font-black">+{newMatchScore}%</span>
+                        )}
+                      </div>
+                      {/* Tiny pointer notch downward towards tab */}
+                      <div className="w-0 h-0 border-x-[3px] border-x-transparent border-t-[3px] border-t-[#0B5D3B] -mt-[0.5px]" />
+                    </div>
                   )}
 
                   <div
@@ -167,6 +205,16 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({
                     {tab.badge !== undefined && (
                       <span className="absolute -top-1.5 -right-2 px-1 py-0.2 rounded-full bg-[#D4AF37] text-black text-[9px] font-black leading-none shadow-xs">
                         {tab.badge}
+                      </span>
+                    )}
+
+                    {/* Subtle pulsing jewel indicator on the Matches icon itself */}
+                    {showNewMatchBadge && (
+                      <span className="absolute -top-1 -right-1.5 flex h-3 w-3 pointer-events-none z-20" aria-hidden="true">
+                        <span className="animate-match-ring absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75" />
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-gradient-to-tr from-[#0B5D3B] via-[#10B981] to-[#D4AF37] border border-white dark:border-[#1E2721] shadow-xs items-center justify-center">
+                          <span className="w-1 h-1 rounded-full bg-white animate-pulse" />
+                        </span>
                       </span>
                     )}
                   </div>

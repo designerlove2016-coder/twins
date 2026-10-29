@@ -7,6 +7,7 @@ import { TactilePillButton } from '../common/TactilePillButton';
 import { OrganicFloatingCard } from '../common/OrganicFloatingCard';
 import { FloatingDimensionCard } from '../common/FloatingDimensionCard';
 import { FloatingMatchCard } from '../common/FloatingMatchCard';
+import { DailyStreakModal } from './DailyStreakModal';
 import { formatCity } from '../../utils/localization';
 import {
   Bell,
@@ -21,6 +22,7 @@ import {
   Bookmark,
   Compass,
   X,
+  Flame,
 } from 'lucide-react';
 
 interface HomeScreenProps {
@@ -55,6 +57,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const [showNotificationDrawer, setShowNotificationDrawer] = useState(false);
   const [selectedDimension, setSelectedDimension] = useState<number | null>(null);
 
+  // Daily Interaction Streak State
+  const [streakCount, setStreakCount] = useState(5);
+  const [showStreakModal, setShowStreakModal] = useState(false);
+  const [hasClaimedToday, setHasClaimedToday] = useState(false);
+
   const hour = new Date().getHours();
   const greeting = hour > 16 || hour < 4 ? t.greetingEvening : t.greetingDay;
 
@@ -73,8 +80,37 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       <header className="sticky top-0 z-30 bg-[#F8F7F2]/90 dark:bg-[#111813]/90 backdrop-blur-md px-5 pt-4 pb-3 border-b border-slate-200/60 dark:border-slate-800 flex items-center justify-between">
         <BrandLogo size="sm" showTagline={false} />
 
-        {/* User Quick Glance, Bookmarks & Notification Trigger */}
-        <div className="flex items-center gap-2.5">
+        {/* User Quick Glance, Streak, Bookmarks & Notification Trigger */}
+        <div className="flex items-center gap-2">
+          {/* Daily Interaction Streak Counter with Visual Flame Animation */}
+          <button
+            type="button"
+            onClick={() => setShowStreakModal(true)}
+            className="
+              relative min-h-[42px] px-2.5 py-1.5 flex items-center gap-1.5 rounded-full
+              bg-gradient-to-b from-[#FFF5EB] via-[#FAF9F5] to-[#F5ECE0]
+              dark:from-[#2B1E12] dark:via-[#1F160C] dark:to-[#140E07]
+              border border-amber-300/80 dark:border-amber-500/50
+              shadow-[0_4px_0_0_#D5B895,0_8px_14px_rgba(245,158,11,0.18)]
+              dark:shadow-[0_4px_0_0_#1A1005,0_0_12px_rgba(245,158,11,0.25)]
+              active:translate-y-1 active:shadow-[0_1px_0_0_#D5B895]
+              hover:brightness-105 transition-all cursor-pointer overflow-hidden
+            "
+            title={language === 'ar' ? 'سلسلة التفاعل اليومي 🔥' : 'Daily Interaction Streak 🔥'}
+            aria-label={language === 'ar' ? 'سلسلة التفاعل اليومي' : 'Daily Interaction Streak'}
+          >
+            <div className="absolute inset-x-1.5 top-0.5 h-[38%] rounded-full bg-gradient-to-b from-white/90 via-white/20 to-transparent pointer-events-none" />
+            <span className="text-base animate-flame shrink-0 leading-none filter drop-shadow-xs">
+              🔥
+            </span>
+            <span className="text-xs font-black font-mono text-amber-700 dark:text-amber-300">
+              {streakCount}
+            </span>
+            <span className="text-[9px] font-bold text-amber-600 dark:text-amber-400">
+              {language === 'ar' ? 'يوم' : 'd'}
+            </span>
+          </button>
+
           {/* Saved Bookmarks Shortcut Button */}
           {onOpenSaved && (
             <button
@@ -177,6 +213,45 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             <MapPin size={13} />
             <span>{formatCity(userProfile.city, language)}</span>
           </div>
+        </div>
+
+        {/* Daily Interaction Streak Quick Visual Banner */}
+        <div
+          onClick={() => setShowStreakModal(true)}
+          className="
+            p-3 rounded-2xl cursor-pointer transition-all active:scale-[0.99]
+            bg-gradient-to-r from-[#FFF5EB] via-[#FFF9F2] to-[#FFF0DE]
+            dark:from-[#261709] dark:via-[#1A1208] dark:to-[#261709]
+            border-2 border-amber-300/80 dark:border-amber-500/40
+            shadow-[0_4px_12px_rgba(245,158,11,0.14)] dark:shadow-[0_4px_14px_rgba(0,0,0,0.4)]
+            flex items-center justify-between gap-2.5 overflow-hidden relative group
+          "
+        >
+          {/* Ambient flame sheen */}
+          <div className="absolute inset-x-2 top-0.5 h-[40%] rounded-xl bg-gradient-to-b from-white/70 via-white/15 to-transparent pointer-events-none" />
+
+          <div className="flex items-center gap-2.5 min-w-0 relative z-10">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-b from-amber-400 via-orange-500 to-amber-600 text-white flex items-center justify-center shadow-xs shrink-0">
+              <span className="text-xl animate-flame">🔥</span>
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-black text-amber-900 dark:text-amber-200 truncate">
+                  {language === 'ar' ? `سلسلة تفاعل نشطة: ${streakCount} أيام متتالية!` : `Active Streak: ${streakCount} Days in a row!`}
+                </span>
+                <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 shrink-0">
+                  {language === 'ar' ? '+50 نقطة' : '+50 pts'}
+                </span>
+              </div>
+              <p className="text-[10px] text-amber-800/80 dark:text-amber-300/80 truncate">
+                {language === 'ar' ? 'حافظ على اشتعال شعلتك اليومية لكسب مضاعفات التوافق والجوائز' : 'Check in daily to keep flame lit & unlock chemistry boosts'}
+              </p>
+            </div>
+          </div>
+
+          <span className="relative z-10 text-[10px] font-black text-amber-800 dark:text-amber-300 bg-white/90 dark:bg-black/40 px-2.5 py-1 rounded-xl border border-amber-300/50 shrink-0 group-hover:scale-105 transition-transform">
+            {language === 'ar' ? 'المكافآت ➔' : 'Rewards ➔'}
+          </span>
         </div>
 
         {/* ============================================================== */}
@@ -339,21 +414,21 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         {/* TOP MATCHES CAROUSEL WITH ORGANIC FLOATING CARDS & BOOKMARKS */}
         {/* ============================================================== */}
         <div>
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-bold text-[#202923] dark:text-white">
+          <div className="flex items-center justify-between mb-2.5 px-1">
+            <h3 className="text-base font-black text-[#1A251E] dark:text-white">
               {t.topMatchesTitle}
             </h3>
             <button
               type="button"
               onClick={onViewMatches}
-              className="text-xs font-bold text-[#0B5D3B] dark:text-[#DDF3E7] hover:underline flex items-center gap-1 cursor-pointer"
+              className="text-xs sm:text-sm font-bold text-[#0B5D3B] dark:text-[#A7F3D0] hover:underline flex items-center gap-1 cursor-pointer transition-colors"
             >
               <span>{t.viewAllMatches}</span>
-              {language === 'ar' ? <ArrowLeft size={12} /> : <ArrowRight size={12} />}
+              {language === 'ar' ? <ArrowLeft size={14} /> : <ArrowRight size={14} />}
             </button>
           </div>
 
-          <div className="flex gap-3.5 overflow-x-auto no-scrollbar py-2 px-1">
+          <div className="flex gap-4 overflow-x-auto no-scrollbar py-2 px-1 scroll-smooth">
             {topMatches.map((m, idx) => (
               <FloatingMatchCard
                 key={m.id}
@@ -431,6 +506,19 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </OrganicFloatingCard>
 
       </main>
+
+      {/* Daily Interaction Streak Modal */}
+      <DailyStreakModal
+        isOpen={showStreakModal}
+        onClose={() => setShowStreakModal(false)}
+        language={language}
+        streakCount={streakCount}
+        hasClaimedToday={hasClaimedToday}
+        onClaimDailyStreak={() => {
+          setStreakCount((prev) => prev + 1);
+          setHasClaimedToday(true);
+        }}
+      />
     </div>
   );
 };

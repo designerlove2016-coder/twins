@@ -17,6 +17,8 @@ export const TRANSLATIONS = {
     navSaved: 'Saved',
     navProfile: 'My Profile',
     navSettings: 'Settings',
+    newMatchAvailable: 'New Match Available',
+    newMatchBadgeLabel: 'New Match',
 
     // Saved & Bookmarks
     savedProfilesTitle: 'Saved Profiles',
@@ -83,9 +85,9 @@ export const TRANSLATIONS = {
     profileComplete: 'Profile 100% Ready',
     findTwinCTA: 'FIND MY TWIN',
     findTwinSub: 'Discover the member with your highest similarity score',
-    topMatchesTitle: 'Closest Personality Twins',
+    topMatchesTitle: 'Closest Twins (Top 5)',
     topMatchesSubtitle: 'Ranked by deep lifestyle and preference overlap',
-    viewAllMatches: 'View Top 5',
+    viewAllMatches: 'View All Results',
     dailyPromptTitle: 'Daily Twin Question',
     dailyPromptQuestion: 'Would you rather take a 6-hour desert road trip or a 1-hour coastal flight?',
     dailyOption1: 'Desert Road Trip & Stargazing',
@@ -191,6 +193,8 @@ export const TRANSLATIONS = {
     navSaved: 'المحفوظات',
     navProfile: 'ملفي الشخصي',
     navSettings: 'الإعدادات',
+    newMatchAvailable: 'تطابق جديد متوفر',
+    newMatchBadgeLabel: 'تطابق جديد',
 
     // Saved & Bookmarks
     savedProfilesTitle: 'الملفات المحفوظة',
@@ -257,9 +261,9 @@ export const TRANSLATIONS = {
     profileComplete: 'الملف مكتمل 100%',
     findTwinCTA: 'ابحث عن شبيهي',
     findTwinSub: 'اكتشف الشخص صاحب أعلى نسبة تشابه معك',
-    topMatchesTitle: 'أقرب الأشخاص لشخصيتك',
+    topMatchesTitle: 'أقرب التوائم إليك (Top 5)',
     topMatchesSubtitle: 'مرتبة بناءً على تطابق دقيق في التفضيلات',
-    viewAllMatches: 'عرض أفضل 5 تطابقات',
+    viewAllMatches: 'عرض كافة النتائج',
     dailyPromptTitle: 'سؤال توأم اليومي',
     dailyPromptQuestion: 'هل تفضل رحلة برية 6 ساعات في الصحراء أم رحلة طيران ساعة إلى شاطئ البحر؟',
     dailyOption1: 'كشتة وشبة نار تحت النجوم',

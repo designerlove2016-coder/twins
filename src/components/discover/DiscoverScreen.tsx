@@ -233,54 +233,80 @@ export const DiscoverScreen: React.FC<DiscoverScreenProps> = ({
                 className="p-4 border border-slate-200/80 dark:border-slate-800"
                 floatDelay={idx % 2 === 1}
               >
-                <div className="flex items-start justify-between gap-3">
+                {/* Card Upper Body: Hero Avatar (sized to user's red rectangle: 124px) + Info */}
+                <div className="flex items-center gap-3.5">
+                  {/* Hero Avatar */}
                   <div
-                    className="flex items-center gap-3 cursor-pointer flex-1 min-w-0"
+                    className="relative shrink-0 cursor-pointer group"
                     onClick={() => onSelectMatch(match)}
                   >
-                    <AvatarRenderer avatar={match.avatar} size={54} direction="center" />
-                    <div className="min-w-0">
-                      <h2 className="text-sm font-bold text-[#202923] dark:text-white truncate">
-                        @{match.username}
-                      </h2>
-                      <div className="flex items-center gap-1.5 text-xs text-[#778078] dark:text-slate-400 mt-0.5">
-                        <MapPin size={12} className="text-[#0B5D3B]" />
-                        <span>{formatCity(match.city, language)}</span>
-                        <span>·</span>
-                        <span>{match.ageRange}</span>
-                      </div>
-                    </div>
+                    <AvatarRenderer
+                      avatar={match.avatar}
+                      size={108}
+                      variant={match.avatar.cutoutUrl ? 'cutout' : (match.avatar.stickerUrl ? 'cutout' : 'circle')}
+                      direction="center"
+                    />
+                    <span className="absolute bottom-1 right-2 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#131D16] shadow-sm z-20" />
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    {/* Match Score Capsule */}
-                    <div className="px-3 py-1 rounded-2xl bg-gradient-to-b from-[#DDF3E7] to-[#CCEEDC] dark:from-[#0B5D3B]/40 dark:to-[#08422A]/50 text-[#0B5D3B] dark:text-[#DDF3E7] text-xs font-black font-mono shadow-[0_3px_0_0_#A8D5C0] dark:shadow-[0_3px_0_0_#052A1A]">
-                      {match.similarityScore}%
+                  {/* Info Column */}
+                  <div className="flex-1 min-w-0 flex flex-col justify-between self-stretch py-0.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 cursor-pointer" onClick={() => onSelectMatch(match)}>
+                        <h2 className="text-base font-black text-[#1A251E] dark:text-white truncate">
+                          @{match.username}
+                        </h2>
+                        <div className="flex items-center gap-1.5 text-xs text-[#69726A] dark:text-slate-300 mt-1">
+                          <MapPin size={12} className="text-[#0B5D3B]" />
+                          <span>{formatCity(match.city, language)}</span>
+                          <span>·</span>
+                          <span>{match.ageRange}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {/* Match Score Capsule */}
+                        <div className="px-2.5 py-1 rounded-2xl bg-gradient-to-b from-[#DDF3E7] to-[#CCEEDC] dark:from-[#0B5D3B]/40 dark:to-[#08422A]/50 text-[#0B5D3B] dark:text-[#DDF3E7] text-xs font-black font-mono shadow-[0_2px_0_0_#A8D5C0] dark:shadow-[0_2px_0_0_#052A1A]">
+                          {match.similarityScore}%
+                        </div>
+
+                        {/* Bookmark / Save Profile Button */}
+                        {onToggleSaveProfile && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onToggleSaveProfile(match.id);
+                            }}
+                            className={`
+                              min-h-[36px] min-w-[36px] flex items-center justify-center rounded-xl
+                              border transition-all duration-150 transform-gpu active:translate-y-0.5 cursor-pointer
+                              ${
+                                isSaved
+                                  ? 'bg-gradient-to-b from-[#FFF9E6] to-[#FBE7AF] dark:from-[#2F2612] dark:to-[#221C0B] border-[#D4AF37]/60 text-[#D4AF37] shadow-[0_2px_0_0_#BFA032]'
+                                  : 'bg-white/80 dark:bg-white/5 border-slate-200 dark:border-slate-800 text-[#778078] hover:text-[#0B5D3B]'
+                              }
+                            `}
+                            title={isSaved ? t.unsaveProfile : t.saveProfile}
+                            aria-label={isSaved ? t.unsaveProfile : t.saveProfile}
+                          >
+                            <Bookmark size={15} className={isSaved ? 'fill-[#D4AF37] text-[#D4AF37]' : ''} />
+                          </button>
+                        )}
+                      </div>
                     </div>
 
-                    {/* Bookmark / Save Profile Button */}
-                    {onToggleSaveProfile && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onToggleSaveProfile(match.id);
-                        }}
-                        className={`
-                          min-h-[38px] min-w-[38px] flex items-center justify-center rounded-xl
-                          border transition-all duration-150 transform-gpu active:translate-y-0.5 cursor-pointer
-                          ${
-                            isSaved
-                              ? 'bg-gradient-to-b from-[#FFF9E6] to-[#FBE7AF] dark:from-[#2F2612] dark:to-[#221C0B] border-[#D4AF37]/60 text-[#D4AF37] shadow-[0_2px_0_0_#BFA032]'
-                              : 'bg-white/80 dark:bg-white/5 border-slate-200 dark:border-slate-800 text-[#778078] hover:text-[#0B5D3B]'
-                          }
-                        `}
-                        title={isSaved ? t.unsaveProfile : t.saveProfile}
-                        aria-label={isSaved ? t.unsaveProfile : t.saveProfile}
-                      >
-                        <Bookmark size={16} className={isSaved ? 'fill-[#D4AF37] text-[#D4AF37]' : ''} />
-                      </button>
-                    )}
+                    {/* Shared interests snippet */}
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {match.sharedInterests.slice(0, 2).map((interest, i) => (
+                        <span
+                          key={i}
+                          className="px-2.5 py-0.5 rounded-full bg-[#E8F7EE] dark:bg-[#122A1E] text-[#07472B] dark:text-[#34D399] text-[10.5px] font-black border border-[#0B5D3B]/30 dark:border-[#10B981]/50 shadow-xs"
+                        >
+                          {formatInterest(interest, language)}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
 

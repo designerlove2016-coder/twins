@@ -45,7 +45,11 @@ const DEFAULT_AVATAR: AvatarConfig = {
   accessory: 'sunglasses',
   expression: 'smile',
   direction: 'center',
-  motionStyle: 'waving',
+  motionStyle: 'sway-left-right',
+  avatarType: 'sticker',
+  stickerUrl: '/assets/aistudio/709598485083659920_7e1c1322.jpg',
+  stickerCategory: 'fun',
+  stickerAnimation: 'sway-left-right',
 };
 
 const DEFAULT_PRIVACY: PrivacySettings = {
@@ -116,6 +120,16 @@ export default function App() {
   // Dynamic Matches State calculated by real matching engine
   const [calculatedMatches, setCalculatedMatches] = useState<MatchProfile[]>([]);
   const [isLoadingMatches, setIsLoadingMatches] = useState(false);
+  const [hasNewHighMatch, setHasNewHighMatch] = useState(false);
+  const [newMatchTopScore, setNewMatchTopScore] = useState<number | undefined>(undefined);
+  const [seenMatchIds, setSeenMatchIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('twin_seen_match_ids');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
   // Modals & Navigation Sub-states
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
@@ -156,12 +170,55 @@ export default function App() {
     try {
       const matches = await getTopTwinMatches(profile, 5);
       setCalculatedMatches(matches);
+
+      // Detect if the matching engine calculated a high-compatibility result (>= 75%)
+      const highMatches = matches.filter((m) => m.similarityScore >= 75);
+      if (highMatches.length > 0) {
+        const topMatch = highMatches[0];
+        setNewMatchTopScore(topMatch.similarityScore);
+
+        // Check if user has already acknowledged this match
+        const seen = (() => {
+          try {
+            const raw = localStorage.getItem('twin_seen_match_ids');
+            return raw ? JSON.parse(raw) : [];
+          } catch {
+            return [];
+          }
+        })();
+
+        if (!seen.includes(topMatch.id)) {
+          setHasNewHighMatch(true);
+        }
+      }
     } catch (e) {
       console.error('Error calculating top matches:', e);
     } finally {
       setIsLoadingMatches(false);
     }
   }, []);
+
+  // Clear new match badge when user navigates to matches screen
+  useEffect(() => {
+    if (activeScreen === 'matches') {
+      setHasNewHighMatch(false);
+      if (calculatedMatches.length > 0) {
+        const topId = calculatedMatches[0].id;
+        setSeenMatchIds((prev) => {
+          if (!prev.includes(topId)) {
+            const next = [...prev, topId];
+            try {
+              localStorage.setItem('twin_seen_match_ids', JSON.stringify(next));
+            } catch {
+              // ignore
+            }
+            return next;
+          }
+          return prev;
+        });
+      }
+    }
+  }, [activeScreen, calculatedMatches]);
 
   // Compute matches on mount and whenever user answers change
   useEffect(() => {
@@ -534,6 +591,9 @@ export default function App() {
         <BottomTabBar
           activeScreen={activeScreen}
           onNavigate={(screen) => {
+            if (screen === 'matches') {
+              setHasNewHighMatch(false);
+            }
             if (screen === 'find_twin') {
               setActiveScreen('find_twin');
             } else {
@@ -542,6 +602,8 @@ export default function App() {
           }}
           language={language}
           savedCount={savedProfileIds.length}
+          hasNewMatch={hasNewHighMatch}
+          newMatchScore={newMatchTopScore}
         />
       )}
 

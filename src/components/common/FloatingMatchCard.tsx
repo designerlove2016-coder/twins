@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { MatchProfile, Language } from '../../types';
 import { AvatarRenderer } from '../avatar/AvatarRenderer';
 import { formatCity } from '../../utils/localization';
-import { Bookmark } from 'lucide-react';
+import { Bookmark, Zap, Sparkles, MapPin } from 'lucide-react';
 
 interface FloatingMatchCardProps {
   match: MatchProfile;
@@ -26,7 +26,7 @@ export const FloatingMatchCard: React.FC<FloatingMatchCardProps> = ({
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0, shineX: 50, shineY: 50, isHovered: false });
 
-  const animationDelay = `${(index * 0.6) % 3}s`;
+  const animationDelay = `${(index * 0.5) % 2.5}s`;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -37,8 +37,8 @@ export const FloatingMatchCard: React.FC<FloatingMatchCardProps> = ({
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((clientY - centerY) / centerY) * -12;
-    const rotateY = ((clientX - centerX) / centerX) * 12;
+    const rotateX = ((clientY - centerY) / centerY) * -10;
+    const rotateY = ((clientX - centerX) / centerX) * 10;
 
     const shineX = (clientX / rect.width) * 100;
     const shineY = (clientY / rect.height) * 100;
@@ -50,6 +50,17 @@ export const FloatingMatchCard: React.FC<FloatingMatchCardProps> = ({
     setTilt({ x: 0, y: 0, shineX: 50, shineY: 50, isHovered: false });
   };
 
+  // Clean username to display in the reference format @username@
+  const cleanUsername = match.username.replace(/^@+|@+$/g, '');
+
+  // Extract cutout or sticker URL
+  const stickerImg =
+    match.avatar?.cutoutUrl ||
+    match.avatar?.stickerUrl ||
+    (match.gender === 'female'
+      ? '/assets/aistudio/character_standing_maya.png'
+      : '/assets/aistudio/faisal_sticker.png');
+
   return (
     <div
       className={`relative perspective-card group select-none py-2 shrink-0 ${className}`}
@@ -57,18 +68,25 @@ export const FloatingMatchCard: React.FC<FloatingMatchCardProps> = ({
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
     >
-      {/* Living Bottom Floor Shadow */}
+      {/* Subtle Luxury Pulsing Glow Aura */}
       <div
-        className="absolute inset-x-3 -bottom-1 h-4 rounded-full bg-black/25 dark:bg-black/50 blur-lg pointer-events-none transition-all duration-300 animate-floor-shadow"
+        aria-hidden="true"
+        className="absolute -inset-1 rounded-[34px] bg-gradient-to-r from-[#0B5D3B]/15 via-[#D4AF37]/10 to-[#10B981]/20 dark:from-[#10B981]/20 dark:via-[#D4AF37]/15 dark:to-[#0B5D3B]/20 blur-md pointer-events-none animate-aura-breath z-0"
         style={{ animationDelay }}
       />
 
-      {/* 3D Tactile Organic Levitation Match Card */}
+      {/* Living Bottom Floor Shadow */}
+      <div
+        className="absolute inset-x-4 -bottom-1 h-4 rounded-full bg-black/20 dark:bg-black/50 blur-lg pointer-events-none transition-all duration-300 animate-floor-shadow"
+        style={{ animationDelay }}
+      />
+
+      {/* 3D Tactile Organic Match Card matching reference design */}
       <div
         ref={cardRef}
         style={{
           transform: tilt.isHovered
-            ? `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(-8px) scale3d(1.04, 1.04, 1.04)`
+            ? `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(-8px) scale3d(1.03, 1.03, 1.03)`
             : undefined,
           animationDelay,
           transition: tilt.isHovered
@@ -77,13 +95,12 @@ export const FloatingMatchCard: React.FC<FloatingMatchCardProps> = ({
         }}
         className="
           relative preserve-3d
-          min-w-[155px] sm:min-w-[165px]
-          p-4 rounded-3xl
-          bg-gradient-to-b from-[#FFFFFF] via-[#FAF9F5] to-[#F2EFE8]
-          dark:from-[#1E2721] dark:via-[#18211B] dark:to-[#131915]
-          border border-white/90 dark:border-white/10
-          shadow-[0_6px_0_0_#D5CEBE,0_12px_20px_-2px_rgba(32,41,35,0.12)]
-          dark:shadow-[0_6px_0_0_#0D130F,0_12px_20px_-2px_rgba(0,0,0,0.5)]
+          w-[205px] min-w-[205px] sm:w-[215px] sm:min-w-[215px]
+          p-4 sm:p-5 rounded-[30px]
+          bg-[#FAFAF7] dark:bg-[#151D18]
+          border border-[#ECE7DE] dark:border-white/10
+          shadow-[0_12px_28px_-6px_rgba(11,93,59,0.08),0_4px_12px_-2px_rgba(0,0,0,0.04)]
+          dark:shadow-[0_12px_28px_-6px_rgba(0,0,0,0.6)]
           flex flex-col items-center text-center
           cursor-pointer
           animate-float-slow
@@ -92,61 +109,99 @@ export const FloatingMatchCard: React.FC<FloatingMatchCardProps> = ({
         "
       >
         {/* Specular glossy top sheen */}
-        <div className="absolute inset-x-2 top-1 h-[42%] rounded-2xl bg-gradient-to-b from-white/85 via-white/20 to-transparent dark:from-white/15 dark:via-transparent pointer-events-none z-10" />
+        <div className="absolute inset-x-3 top-1 h-[35%] rounded-3xl bg-gradient-to-b from-white/90 via-white/20 to-transparent dark:from-white/10 dark:via-transparent pointer-events-none z-10" />
 
         {/* Dynamic Light Reflection tracking cursor */}
         {tilt.isHovered && (
           <div
             className="absolute inset-0 pointer-events-none z-20"
             style={{
-              background: `radial-gradient(circle at ${tilt.shineX}% ${tilt.shineY}%, rgba(255, 255, 255, 0.5) 0%, transparent 60%)`,
+              background: `radial-gradient(circle at ${tilt.shineX}% ${tilt.shineY}%, rgba(255, 255, 255, 0.45) 0%, transparent 60%)`,
             }}
           />
         )}
 
-        {/* Quick Bookmark Button in Card Corner */}
-        {onToggleSave && (
+        {/* Top Control Bar: Circular Bookmark Button (Left) + Compatibility Pill (Right) */}
+        <div className="relative z-30 w-full flex items-center justify-between mb-2">
+          {/* Circular Gold Bookmark Button */}
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              onToggleSave(match.id);
+              onToggleSave?.(match.id);
             }}
             className={`
-              absolute top-2.5 right-2.5 z-30 w-7 h-7 rounded-full flex items-center justify-center
-              transition-all duration-150 active:scale-90
+              w-9 h-9 rounded-full flex items-center justify-center
+              transition-all duration-150 active:scale-90 hover:scale-105 cursor-pointer
               ${
                 isSaved
-                  ? 'bg-[#FFF9E6] dark:bg-[#2F2612] text-[#D4AF37] border border-[#D4AF37]/50 shadow-xs'
-                  : 'bg-white/80 dark:bg-black/30 text-slate-400 hover:text-[#0B5D3B] border border-slate-200/50 dark:border-white/10'
+                  ? 'bg-[#FBF3DC] dark:bg-[#342A16] text-[#D4AF37] border border-[#E9D9A5] shadow-xs'
+                  : 'bg-[#FCF8EE] dark:bg-[#252016] text-[#D4AF37] hover:bg-[#FBF3DC] border border-[#ECDFA8] dark:border-[#52441D] shadow-xs'
               }
             `}
-            title={isSaved ? 'Bookmarked' : 'Bookmark profile'}
-            aria-label={isSaved ? 'Bookmarked' : 'Bookmark profile'}
+            title={isSaved ? 'تم الحفظ' : 'حفظ الملف'}
+            aria-label={isSaved ? 'Saved bookmark' : 'Save bookmark'}
           >
-            <Bookmark size={13} className={isSaved ? 'fill-[#D4AF37]' : ''} />
+            <Bookmark size={15} className={isSaved ? 'fill-[#D4AF37]' : 'fill-[#D4AF37]/90'} />
           </button>
-        )}
 
-        {/* Avatar with subtle 3D lift */}
-        <div className="relative z-10 my-1 transition-transform duration-300 group-hover:scale-110">
-          <AvatarRenderer avatar={match.avatar} size={58} direction="center" />
+          {/* Mint Capsule Pill with Similarity Score and Lightning Zap */}
+          <div className="px-3 py-1 rounded-full bg-[#DDF3E7] dark:bg-[#0B5D3B]/40 text-[#0B5D3B] dark:text-[#A7F3D0] text-xs font-black flex items-center gap-1 border border-[#BCE8D1]/80 shadow-xs tabular-nums">
+            <span>{match.similarityScore}%</span>
+            <Zap size={12} className="fill-[#0B5D3B] dark:fill-[#A7F3D0] text-[#0B5D3B] dark:text-[#A7F3D0]" />
+          </div>
         </div>
 
-        {/* Username */}
-        <h4 className="relative z-10 mt-2 text-xs font-bold text-[#202923] dark:text-white truncate max-w-[125px]">
-          @{match.username}
+        {/* Large Half-Body Sticker Character with Online Status Dot */}
+        <div className="relative z-10 w-full h-[145px] sm:h-[155px] flex items-center justify-center my-1 transition-transform duration-300 group-hover:scale-105">
+          {stickerImg ? (
+            <img
+              src={stickerImg}
+              alt={match.username}
+              className="h-[135px] sm:h-[145px] w-auto max-w-[170px] object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.06)] pointer-events-none select-none"
+              loading="lazy"
+            />
+          ) : (
+            <AvatarRenderer avatar={match.avatar} size={110} direction="center" />
+          )}
+
+          {/* Active Emerald Online Dot on bottom-right of sticker */}
+          <div
+            className="absolute bottom-1 right-5 sm:right-6 w-4 h-4 rounded-full bg-[#10B981] border-2 border-white dark:border-[#151D18] shadow-xs"
+            title="متصل الآن"
+          />
+        </div>
+
+        {/* Username centered (@username@) */}
+        <h4 className="relative z-10 mt-2 text-base font-black text-[#1A251E] dark:text-white tracking-tight truncate max-w-[185px]">
+          @{cleanUsername}@
         </h4>
 
-        {/* City label with clean localization */}
-        <span className="relative z-10 text-[10px] text-[#778078] dark:text-slate-400 mt-0.5">
-          {formatCity(match.city, language)}
-        </span>
-
-        {/* Tactile 3D Pill Badge: [95% Twin / 95% تطابق] */}
-        <div className="relative z-10 mt-2.5 px-3 py-1 rounded-full bg-gradient-to-b from-[#DDF3E7] via-[#D5F0E1] to-[#C2E7D1] dark:from-[#0B5D3B]/40 dark:to-[#08422A]/60 text-[#0B5D3B] dark:text-[#DDF3E7] text-[11px] font-extrabold font-mono tabular-nums border border-white/60 dark:border-[#0B5D3B]/40 shadow-[0_3px_0_0_#9DCDB6,0_6px_10px_rgba(11,93,59,0.15)] dark:shadow-[0_3px_0_0_#062A1B]">
-          {match.similarityScore}% {language === 'ar' ? 'تطابق' : 'Twin'}
+        {/* Location with Pin Icon (e.g. الرياض 📍) */}
+        <div className="relative z-10 flex items-center justify-center gap-1 text-xs font-semibold text-[#6C7A70] dark:text-slate-400 mt-0.5">
+          <span>{formatCity(match.city, language)}</span>
+          <MapPin size={12} className="text-[#88988D] dark:text-slate-400 shrink-0" />
         </div>
+
+        {/* Tactile Capsule Button: اهتمامات متطابقة ✨ */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClick?.();
+          }}
+          className="
+            relative z-10 mt-3.5 w-full py-2.5 px-3 rounded-full
+            bg-[#E8F7EE] hover:bg-[#D5EFE0] dark:bg-[#0B5D3B]/25 dark:hover:bg-[#0B5D3B]/40
+            text-[#0B5D3B] dark:text-[#A7F3D0] text-xs font-black
+            border border-[#A7E2C3]/70 dark:border-[#0B5D3B]/40
+            shadow-xs flex items-center justify-center gap-1.5
+            transition-all duration-150 active:scale-95 cursor-pointer
+          "
+        >
+          <span>{language === 'ar' ? 'اهتمامات متطابقة' : 'Matching Interests'}</span>
+          <Sparkles size={13} className="text-[#0B5D3B] dark:text-[#A7F3D0] shrink-0" />
+        </button>
       </div>
     </div>
   );

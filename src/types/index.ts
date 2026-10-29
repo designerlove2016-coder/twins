@@ -44,7 +44,13 @@ export interface AvatarConfig {
   accessory: 'none' | 'glasses' | 'sunglasses' | 'headphones';
   expression: 'smile' | 'cool' | 'wink' | 'cheerful';
   direction?: 'left' | 'right' | 'center';
-  motionStyle?: 'waving' | 'smiling' | 'bouncing' | 'nodding' | 'cool-sway' | 'wink';
+  motionStyle?: 'waving' | 'smiling' | 'bouncing' | 'nodding' | 'cool-sway' | 'wink' | 'sway-left-right' | 'bouncy-hop';
+  avatarType?: 'illustrated' | 'sticker';
+  stickerUrl?: string;
+  cutoutUrl?: string;
+  portraitUrl?: string;
+  stickerCategory?: 'girl' | 'boy' | 'fun';
+  stickerAnimation?: 'sway-left-right' | 'bouncy-hop' | 'pulse-grow' | 'tilt-wiggle';
 }
 
 export interface UserProfile {
